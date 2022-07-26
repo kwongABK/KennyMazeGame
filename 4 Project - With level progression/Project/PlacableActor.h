@@ -19,6 +19,7 @@ enum class ActorType
 	Goal,
 	Key,
 	Money,
+	Shopkeep,
 	Player
 };
 

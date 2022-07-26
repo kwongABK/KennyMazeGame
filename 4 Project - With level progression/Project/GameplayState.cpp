@@ -214,6 +214,16 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			}
 			break;
 		}
+		case ActorType::Shopkeep:
+		{
+			if (m_player.GetMoney() >= 5)
+			{
+				m_player.AddMoney(-5);
+				m_player.IncrementLives();
+				AudioManager::GetInstance()->PlayShopkeepSound();
+			}
+			break;
+		}
 		case ActorType::Goal:
 		{
 			Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);

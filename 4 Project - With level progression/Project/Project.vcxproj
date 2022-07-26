@@ -167,6 +167,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="SettingsState.cpp" />
+    <ClCompile Include="Shopkeep.cpp" />
     <ClCompile Include="StateMachineExampleGame.cpp" />
     <ClCompile Include="WinState.cpp" />
   </ItemGroup>
@@ -189,6 +190,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="SettingsState.h" />
+    <ClInclude Include="Shopkeep.h" />
     <ClInclude Include="StateMachineExampleGame.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="WinState.h" />

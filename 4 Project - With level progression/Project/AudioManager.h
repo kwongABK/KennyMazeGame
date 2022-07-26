@@ -84,6 +84,13 @@ public:
 		Beep(200, 100);
 	}
 
+	void PlayShopkeepSound()
+	{
+		if (!m_SoundOn)
+			return;
+		Beep(3136, 100);
+	}
+
 	void PlayLoseSound()
 	{
 		if (!m_SoundOn)

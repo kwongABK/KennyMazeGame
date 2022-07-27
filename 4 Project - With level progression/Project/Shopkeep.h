@@ -7,7 +7,7 @@ class Shopkeep : public PlacableActor
 {
 public:
 	Shopkeep(int x, int y)
-		: PlacableActor(x, y)
+		: PlacableActor(x, y, ActorColor::RedOnWhite)
 	{
 
 	};

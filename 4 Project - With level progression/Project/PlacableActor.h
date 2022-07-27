@@ -9,7 +9,8 @@ enum class ActorColor
 	Red = 12,
 	SolidGreen = 34,
 	SolidRed = 68,
-	SolidBlue = 153
+	SolidBlue = 153,
+	RedOnWhite = 244
 };
 
 enum class ActorType

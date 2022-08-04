@@ -1,7 +1,10 @@
 #include "Game.h"
+#include <thread>
+#include <chrono>
 
 Game::Game()
 	: m_pStateMachine(nullptr)
+	, isGameOver(false)
 {
 
 }
@@ -17,19 +20,11 @@ void Game::Initialize(GameStateMachine* pStateMachine)
 
 void Game::RunGameLoop()
 {
-	bool isGameOver = false;
-
-	while (!isGameOver)
-	{
-		// update with no input
-		Update(false);
-		// Draw
-		Draw();
-		// Update with input
-		isGameOver = Update();
-	}
-
-	Draw();
+	std::thread Drawer(&Game::Draw, this);
+	std::thread Updater(&Game::Update, this, true);
+	
+	Updater.join();
+	Drawer.join();
 }
 
 void Game::Deinitialize()
@@ -40,10 +35,18 @@ void Game::Deinitialize()
 
 bool Game::Update(bool processInput)
 {
-	return m_pStateMachine->UpdateCurrentState(processInput);
+	while (!isGameOver)
+	{
+		isGameOver = m_pStateMachine->UpdateCurrentState(processInput);
+	}
+	return true;
 }
 
 void Game::Draw()
 {
-	m_pStateMachine->DrawCurrentState();
+	while (!isGameOver)
+	{
+		m_pStateMachine->DrawCurrentState();
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
 }

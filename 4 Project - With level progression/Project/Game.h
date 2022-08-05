@@ -6,7 +6,6 @@
 class Game
 {
 	GameStateMachine* m_pStateMachine;
-	bool isGameOver;
 public:
 	Game();
 	void Initialize(GameStateMachine* pStateMachine);

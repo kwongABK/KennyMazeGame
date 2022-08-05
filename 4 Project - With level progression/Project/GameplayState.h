@@ -8,10 +8,12 @@
 #include <string>
 
 class StateMachineExampleGame;
+class InputProcessor;
 
 class GameplayState : public GameState
 {
 	StateMachineExampleGame* m_pOwner;
+	InputProcessor* m_pInputProcessor;
 	
 	Player m_player;
 	Level* m_pLevel;

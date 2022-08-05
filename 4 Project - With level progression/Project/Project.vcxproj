@@ -168,6 +168,7 @@
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="Shopkeep.cpp" />
+    <ClCompile Include="InputProcessor.cpp" />
     <ClCompile Include="StateMachineExampleGame.cpp" />
     <ClCompile Include="WinState.cpp" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="HighScoreState.h" />
+    <ClInclude Include="InputProcessor.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LoseState.h" />

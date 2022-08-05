@@ -13,15 +13,9 @@
 #include "AudioManager.h"
 #include "Utility.h"
 #include "StateMachineExampleGame.h"
+#include "InputProcessor.h"
 
 using namespace std;
-
-constexpr int kArrowInput = 224;
-constexpr int kLeftArrow = 75;
-constexpr int kRightArrow = 77;
-constexpr int kUpArrow = 72;
-constexpr int kDownArrow = 80;
-constexpr int kEscapeKey = 27;
 
 GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	: m_pOwner(pOwner)
@@ -29,16 +23,21 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_skipFrameCount(0)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
+	, m_pInputProcessor(new InputProcessor())
 {
-	m_LevelNames.push_back("Level1.txt");
+	//m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
-	m_LevelNames.push_back("Level3.txt");
+	//m_LevelNames.push_back("Level3.txt");
 }
 
 GameplayState::~GameplayState()
 {
 	delete m_pLevel;
 	m_pLevel = nullptr;
+
+	m_pInputProcessor->Stop();
+	delete m_pInputProcessor;
+	m_pInputProcessor = nullptr;
 }
 
 bool GameplayState::Load()
@@ -58,61 +57,39 @@ bool GameplayState::Load()
 void GameplayState::Enter()
 {
 	Load();
+	m_pInputProcessor->Run();
 }
 
 bool GameplayState::Update(bool processInput)
 {
 	if (processInput && !m_beatLevel)
 	{
-		int input = _getch();
-		int arrowInput = 0;
 		int newPlayerX = m_player.GetXPosition();
 		int newPlayerY = m_player.GetYPosition();
 
-		// One of the arrow keys were pressed
-		if (input == kArrowInput)
-		{
-			arrowInput = _getch();
-		}
-
-		if ((input == kArrowInput && arrowInput == kLeftArrow) ||
-			(char)input == 'A' || (char)input == 'a')
-		{
-			newPlayerX--;
-		}
-		else if ((input == kArrowInput && arrowInput == kRightArrow) ||
-			(char)input == 'D' || (char)input == 'd')
-		{
-			newPlayerX++;
-		}
-		else if ((input == kArrowInput && arrowInput == kUpArrow) ||
-			(char)input == 'W' || (char)input == 'w')
-		{
+		switch (m_pInputProcessor->GetInput()) {
+		case InputEvent::MoveUp:
 			newPlayerY--;
-		}
-		else if ((input == kArrowInput && arrowInput == kDownArrow) ||
-			(char)input == 'S' || (char)input == 's')
-		{
+			break;
+		case InputEvent::MoveDown:
 			newPlayerY++;
-		}
-		else if (input == kEscapeKey)
-		{
-			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-		}
-		else if ((char)input == 'Z' || (char)input == 'z')
-		{
+			break;
+		case InputEvent::MoveLeft:
+			newPlayerX--;
+			break;
+		case InputEvent::MoveRight:
+			newPlayerX++;
+			break;
+		case InputEvent::DropKey:
 			m_player.DropKey();
+			break;
+		case InputEvent::ExitGame:
+			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+			break;
 		}
 
-		// If position never changed
-		if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
-		{
-			//return false;
-		}
-		else
-		{
-			HandleCollision(newPlayerX, newPlayerY);
-		}
+		m_player.Update();
+		HandleCollision(newPlayerX, newPlayerY);
 	}
 	if (m_beatLevel)
 	{
@@ -138,6 +115,7 @@ bool GameplayState::Update(bool processInput)
 
 		}
 	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
 	return false;
 }
